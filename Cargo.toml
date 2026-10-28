@@ -1,0 +1,16 @@
+[package]
+name = "vangogh"
+version = "0.1.0"
+edition = "2024"
+license = "MIT"
+authors = ["Snoep <maxim@snoep.io>"]
+description = "Ear clipping triangulation of simple polygons with collinear vertices, with exact predicates"
+repository = "https://github.com/maximsnoep/vangogh"
+readme = "README.md"
+keywords = ["triangulation", "polygon", "ear-clipping", "geometry", "mesh"]
+categories = ["graphics", "mathematics", "algorithms"]
+
+[dependencies]
+nalgebra = "0.34.0"
+ordered-float = "5.0.0"
+robust = "1.2.0"
