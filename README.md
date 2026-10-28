@@ -22,17 +22,35 @@ let polygon = [
 let triangles = vangogh::triangulate(&polygon).unwrap(); // three triangles of ids, counter-clockwise
 ```
 
-`triangulate` returns `None` if no such triangulation exists, e.g. when all vertices are collinear. A planar 3D polygon
-can be triangulated in a projection onto its plane; the ids carry the triangles back.
+`triangulate` returns `None` only if the input is not a simple counter-clockwise polygon with positive area, e.g. when
+all vertices are collinear or the order is clockwise. A planar 3D polygon can be triangulated in a projection onto its
+plane; the ids carry the triangles back.
 
 ## How it works
 
-Ear clipping, which always succeeds by the two-ears theorem (G. H. Meisters, *[Polygons Have
-Ears](https://doi.org/10.2307/2319703)*, American Mathematical Monthly 82(6), 1975). An ear is clipped only if no
-other vertex lies in it and both the ear and the rest of the polygon keep a positive area. Among the valid ears, the
-one that leaves the largest smaller area goes first, which avoids slivers. Orientation is decided exactly with
-Shewchuk's adaptive precision predicates (*[Adaptive Precision Floating-Point Arithmetic and Fast Robust Geometric
-Predicates](https://doi.org/10.1007/PL00009321)*, 1997), so rounding cannot leave a flat triangle.
+This crate builds on two results:
+
+- **Two ears** guarantee that ear clipping succeeds: Gary H. Meisters. *[Polygons Have
+  Ears](https://doi.org/10.2307/2319703)*. The American Mathematical Monthly 82(6), 1975.
+- **Exact predicates** decide every orientation without rounding errors: Jonathan Richard Shewchuk. *[Adaptive
+  Precision Floating-Point Arithmetic and Fast Robust Geometric Predicates](https://doi.org/10.1007/PL00009321)*.
+  Discrete & Computational Geometry 18(3), 1997.
+
+An ear is clipped only if no other vertex lies in it and both the ear and the rest of the polygon keep a positive area.
+Among the valid ears, the one that leaves the largest smaller area goes first, which avoids slivers.
+
+```bibtex
+@article{Meisters:1975:PHE,
+  author  = {Meisters, Gary H.},
+  title   = {Polygons Have Ears},
+  journal = {The American Mathematical Monthly}, volume = {82}, number = {6}, pages = {648--651}, year = {1975}
+}
+@article{Shewchuk:1997:APF,
+  author  = {Shewchuk, Jonathan Richard},
+  title   = {Adaptive Precision Floating-Point Arithmetic and Fast Robust Geometric Predicates},
+  journal = {Discrete \& Computational Geometry}, volume = {18}, number = {3}, pages = {305--363}, year = {1997}
+}
+```
 
 ## License
 

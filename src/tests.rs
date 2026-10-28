@@ -121,9 +121,9 @@ fn many_collinear_vertices_on_all_sides() {
     check(&cut_triangle(CORNERS, [&near_corners, &near_corners, &clustered]));
 }
 
-/// Known failure: rounding makes the points on a side slightly non-collinear (turns of about +-1e-26), so the polygon
-/// is not exactly convex. Ears of area ~1e-26 are clipped among them, and the shoelace remainder area (rounding error
-/// ~1e-17) does not detect that the rest degenerates, until only vertices on side (0.084, 0.916)-(0, 0) remain: None.
+/// Rounding makes the points on a side slightly non-collinear (turns of about +-1e-26), so the polygon is not exactly
+/// convex. This used to fail (tiny ears were clipped until only collinear vertices remained); the exact turn tests now
+/// keep the remainder from degenerating.
 #[test]
 fn rounded_collinear_vertices_close_together() {
     let side = [0.500_000_015, 0.500_000_016, 0.500_000_017, 0.500_000_018];

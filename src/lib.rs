@@ -5,10 +5,10 @@
 //! for polygons with holes or self-intersections. A 3D polygon in a plane can be triangulated in a projection onto that
 //! plane (e.g., dropping the coordinate of its normal's largest component); the ids carry the triangles back.
 //!
-//! Output: `n - 2` triangles (counter-clockwise) that use every vertex and have positive area, or `None` if no such
-//! triangulation is found (e.g., all vertices are collinear). An ear is only clipped if no other vertex lies in it and
-//! both the ear and the remaining polygon have positive area; among those, our heuristic picks the ear that maximizes
-//! the smaller of the two areas, which avoids slivers.
+//! Output: `n - 2` triangles (counter-clockwise) that use every vertex and have positive area, or `None` only if the
+//! input is not a simple counter-clockwise polygon with positive area (e.g., all vertices are collinear). An ear is only
+//! clipped if no other vertex lies in it and both the ear and the remaining polygon have positive area; among those, our
+//! heuristic picks the ear that maximizes the smaller of the two areas, which avoids slivers.
 //!
 //! Whether an ear or the remaining polygon has positive area is decided exactly, with Shewchuk's adaptive precision
 //! orientation predicate ([1997](https://doi.org/10.1007/PL00009321)), so rounding in nearly collinear vertices cannot
@@ -57,7 +57,8 @@ fn area(mut t: [Vector2D; 3]) -> f64 {
     (t[1] - t[0]).perp(&(t[2] - t[0]))
 }
 
-/// Triangulate a counter-clockwise polygon of (id, position). None if that fails (e.g., all vertices are collinear).
+/// Triangulate a counter-clockwise polygon of (id, position). None only if the input is not a simple counter-clockwise
+/// polygon with positive area (e.g., all vertices are collinear, or the order is clockwise).
 ///
 /// Greedy: with exact predicates, a simple polygon always has a valid ear, and what remains after clipping it is again
 /// a simple polygon with positive area (two-ears theorem), so no choice leads to a dead end.
